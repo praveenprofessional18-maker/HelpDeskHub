@@ -49,3 +49,26 @@ def test_user_can_open_own_ticket(client, ticket):
 
     assert response.status_code == 200
     assert b"Campus Wi-Fi disconnects" in response.data
+
+
+def test_user_cannot_open_another_users_ticket(client, app, ticket):
+    from werkzeug.security import generate_password_hash
+
+    with app.app_context():
+        other_user = User(
+            name="Other Student",
+            email="other@college.edu",
+            password_hash=generate_password_hash("correct-horse"),
+        )
+        db.session.add(other_user)
+        db.session.commit()
+        other_id = other_user.id
+
+    client.post(
+        "/login",
+        data={"email": "other@college.edu", "password": "correct-horse"},
+    )
+    response = client.get(f"/tickets/{ticket}")
+
+    assert other_id is not None
+    assert response.status_code == 404
