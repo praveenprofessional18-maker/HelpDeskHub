@@ -99,3 +99,8 @@ function initAdminFilters() {
   });
   filterCards();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  initValidation();
+  initAdminFilters();
+});
