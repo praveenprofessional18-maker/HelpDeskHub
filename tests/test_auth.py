@@ -59,3 +59,17 @@ def test_logout_then_dashboard_is_blocked(client, user):
     assert logout_response.status_code == 302
     assert response.status_code == 200
     assert b"Login to HelpDeskHub" in response.data
+
+
+def test_external_next_url_is_ignored(client, user):
+    response = client.post(
+        "/login",
+        data={
+            "email": "alex@college.edu",
+            "password": "correct-horse",
+            "next": "https://outside.example/",
+        },
+    )
+
+    assert response.status_code == 302
+    assert response.headers["Location"].endswith("/dashboard")
