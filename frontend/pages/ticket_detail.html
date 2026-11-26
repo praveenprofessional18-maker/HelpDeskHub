@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}HDH-{{ '%05d'|format(ticket.id) }} - HelpDeskHub{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">TICKET DETAILS</span><h1>{{ ticket.title }}</h1><p>HDH-{{ '%05d'|format(ticket.id) }}</p></div><span class="badge badge-large badge-{{ ticket.status|lower|replace(' ', '-') }}">{{ ticket.status }}</span></section>
+<section class="detail-grid">
+  <article class="panel detail-main reveal"><span class="detail-label">Description</span><p class="ticket-description">{{ ticket.description }}</p></article>
+  <aside class="panel detail-meta reveal">
+    <dl>
+      <div><dt>Category</dt><dd>{{ ticket.category }}</dd></div>
+      <div><dt>Priority</dt><dd><span class="priority priority-{{ ticket.priority|lower }}">{{ ticket.priority }}</span></dd></div>
+      <div><dt>Created</dt><dd>{{ ticket.created_at.strftime('%B %d, %Y at %I:%M %p') }}</dd></div>
+      <div><dt>Last updated</dt><dd>{{ ticket.updated_at.strftime('%B %d, %Y at %I:%M %p') }}</dd></div>
+      {% if current_user.role == 'admin' %}<div><dt>Submitted by</dt><dd>{{ ticket.user.name }}<br><small>{{ ticket.user.email }}</small></dd></div>{% endif %}
+    </dl>
+  </aside>
+</section>
+{% if current_user.role == 'admin' %}
+<section class="panel status-panel reveal"><form method="post" action="{{ url_for('admin.update_status', ticket_id=ticket.id) }}" class="status-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>Update status<select name="status">{% for status in ['Open','In Progress','Resolved'] %}<option value="{{ status }}" {% if ticket.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></label><button class="button button-primary" type="submit">Save Status</button></form></section>
+{% endif %}
+{% endblock %}

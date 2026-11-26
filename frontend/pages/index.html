@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}HelpDeskHub - IT Support Made Simple{% endblock %}
+{% block body %}
+<div class="landing landing-v2">
+  <nav class="landing-nav" aria-label="Primary navigation">
+    <a class="brand" href="{{ url_for('auth.index') }}" aria-label="HelpDeskHub home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="img"><path d="M7.4 4.5A3.4 3.4 0 0 1 10.8 1h2.4a3.4 3.4 0 0 1 3.4 3.5v1.7h1.7a3.4 3.4 0 0 1 3.4 3.4v2.4a3.4 3.4 0 0 1-3.4 3.4H16.7v3.1a1.5 1.5 0 0 1-1.5 1.5h-1.5v-4.6H10.3v4.6H8.8a1.5 1.5 0 0 1-1.5-1.5v-3.1H5.7a3.4 3.4 0 0 1-3.4-3.4V9.6A3.4 3.4 0 0 1 5.7 6.2h1.7V4.5Zm1.5 1.7h6.2V4.5a1.9 1.9 0 0 0-1.9-1.9h-2.4a1.9 1.9 0 0 0-1.9 1.9v1.7Zm-3.2 1.5A1.9 1.9 0 0 0 3.8 9.6v2.4A1.9 1.9 0 0 0 5.7 13.9h1.6V7.7H5.7Zm12.1 0h-1.6v6.2h1.6a1.9 1.9 0 0 0 1.9-1.9V9.6a1.9 1.9 0 0 0-1.9-1.9Z"/></svg>
+      </span>
+      <span class="brand-name">HelpDesk<span>Hub</span></span>
+    </a>
+    <div class="landing-links">
+      <a href="#features" class="nav-text-link">Features</a>
+      <a href="{{ url_for('auth.login') }}" class="button button-ghost">Log in</a>
+      <a href="{{ url_for('auth.register') }}" class="button button-primary">Create account</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero hero-v2">
+      <div class="hero-copy reveal">
+        <div class="hero-kicker"><span></span>Support that keeps work moving</div>
+        <h1>Every issue.<br><span>One clear path.</span></h1>
+        <p>Give your team a faster way to report problems, find answers, and keep every support request moving forward.</p>
+        <div class="hero-actions">
+          <a href="{{ url_for('auth.register') }}" class="button button-primary button-large">Start for free <span aria-hidden="true">→</span></a>
+          <a href="{{ url_for('auth.login') }}" class="button button-ghost button-large">View dashboard</a>
+        </div>
+        <div class="hero-proof">
+          <div class="proof-avatars" aria-hidden="true"><span>AM</span><span>JL</span><span>SK</span></div>
+          <p><strong>Built for modern teams</strong><br><span>Simple, focused, and easy to manage</span></p>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" aria-label="HelpDeskHub dashboard preview">
+        <div class="visual-glow"></div>
+        <div class="dashboard-window">
+          <div class="window-bar">
+            <div class="window-dots"><span></span><span></span><span></span></div>
+            <div class="window-search"><span></span> Search tickets</div>
+            <div class="window-avatar">AM</div>
+          </div>
+          <div class="dashboard-body">
+            <aside class="window-sidebar">
+              <div class="window-logo"><span>H</span></div>
+              <span class="window-nav active"></span><span class="window-nav"></span><span class="window-nav"></span><span class="window-nav"></span>
+            </aside>
+            <div class="window-content">
+              <div class="window-heading"><div><small>Overview</small><strong>Support dashboard</strong></div><button type="button" tabindex="-1">+ New ticket</button></div>
+              <div class="window-stats">
+                <div><span>Open</span><strong>12</strong><small>+2 today</small></div>
+                <div><span>In progress</span><strong>8</strong><small>Live updates</small></div>
+                <div><span>Resolved</span><strong>46</strong><small>+8 this week</small></div>
+              </div>
+              <div class="window-tickets">
+                <div class="window-tickets-heading"><strong>Recent tickets</strong><span>View all</span></div>
+                <div class="window-ticket"><div class="ticket-icon">W</div><div><strong>Wi-Fi keeps disconnecting</strong><small>Network / Wi-Fi · HDH-0042</small></div><span class="status-pill progress">In progress</span></div>
+                <div class="window-ticket"><div class="ticket-icon account">A</div><div><strong>Unable to access account</strong><small>Account access · HDH-0041</small></div><span class="status-pill open">Open</span></div>
+                <div class="window-ticket"><div class="ticket-icon resolved">P</div><div><strong>Printer setup request</strong><small>Hardware · HDH-0040</small></div><span class="status-pill resolved">Resolved</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-card floating-card-one"><span class="floating-icon">✓</span><div><strong>Ticket resolved</strong><small>Just now</small></div></div>
+        <div class="floating-card floating-card-two"><span class="pulse-dot"></span><div><strong>12 active requests</strong><small>Team is on it</small></div></div>
+      </div>
+    </section>
+
+    <section class="feature-section" id="features">
+      <div class="section-heading reveal">
+        <span class="eyebrow">A simpler support desk</span>
+        <h2>Everything in the right place.</h2>
+        <p>From first report to final resolution, every step stays organized and visible.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <div class="feature-icon feature-icon-report" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div><h3>Report in seconds</h3><p>Capture the details, choose a category, and submit a complete request.</p></div>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-icon feature-icon-track" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div><h3>Track every update</h3><p>See exactly where a request stands from open to resolved.</p></div>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-icon feature-icon-manage" aria-hidden="true"><span>12</span></div>
+          <div><h3>Manage with clarity</h3><p>Filter, prioritize, assign, and update tickets in one focused workspace.</p></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer><a class="brand footer-brand" href="{{ url_for('auth.index') }}"><span class="brand-mark">H</span><span class="brand-name">HelpDesk<span>Hub</span></span></a><small>One place for every support request.</small></footer>
+</div>
+{% endblock %}

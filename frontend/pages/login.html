@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login - HelpDeskHub{% endblock %}
+{% block body %}
+<main class="auth-page">
+  <section class="auth-card reveal">
+    <a class="brand" href="{{ url_for('auth.index') }}"><span class="brand-mark">H</span><span class="brand-name">HelpDeskHub</span></a>
+    <div class="auth-heading"><h1>Welcome back</h1><p>Sign in to manage your support requests.</p></div>
+    <form method="post" class="auth-form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Email Address<input type="email" name="email" autocomplete="email" placeholder="you@company.com" required></label>
+      <label>Password<div class="password-field"><input type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button type="button" class="password-toggle" aria-label="Show password">Show</button></div></label>
+      <button type="submit" class="button button-primary button-full">Sign In</button>
+    </form>
+    <p class="auth-switch">New to HelpDeskHub? <a href="{{ url_for('auth.register') }}">Create account</a></p>
+  </section>
+</main>
+{% endblock %}

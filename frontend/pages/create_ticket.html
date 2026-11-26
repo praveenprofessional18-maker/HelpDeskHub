@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Create Ticket - HelpDeskHub{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">NEW REQUEST</span><h1>Create a Ticket</h1><p>Tell us what went wrong and choose the right priority.</p></div></section>
+<section class="panel form-panel reveal">
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <label class="span-2">Issue Title<input type="text" name="title" minlength="5" maxlength="160" placeholder="Brief summary of the issue" required></label>
+      <label>Issue Category<select name="category" required><option value="">Select category</option>{% for category in categories %}<option value="{{ category }}">{{ category }}</option>{% endfor %}</select></label>
+      <label>Priority<select name="priority" required><option value="">Select priority</option>{% for priority in priorities %}<option value="{{ priority }}">{{ priority }}</option>{% endfor %}</select></label>
+      <label class="span-2">Description<textarea name="description" minlength="10" rows="7" placeholder="Describe what happened, when it started, and any steps you have tried." required></textarea></label>
+    </div>
+    <div class="form-actions"><a href="{{ url_for('tickets.tickets') }}" class="button button-ghost">Cancel</a><button type="submit" class="button button-primary">Submit Ticket</button></div>
+  </form>
+</section>
+{% endblock %}

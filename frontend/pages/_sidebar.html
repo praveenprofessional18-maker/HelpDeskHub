@@ -1,0 +1,31 @@
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="{{ url_for('admin.dashboard') if current_user.role == 'admin' else url_for('tickets.dashboard') }}">
+    <span class="brand-mark">H</span>
+    <span class="brand-name">HelpDeskHub</span>
+  </a>
+  <nav class="side-nav" aria-label="Primary navigation">
+    {% if current_user.role == 'admin' %}
+      <a href="{{ url_for('admin.dashboard') }}" class="nav-link">Overview</a>
+      <a href="{{ url_for('admin.tickets') }}" class="nav-link">All Tickets</a>
+      <a href="{{ url_for('admin.tickets', status='Open') }}" class="nav-link">Open Tickets</a>
+      <a href="{{ url_for('admin.tickets', status='In Progress') }}" class="nav-link">In Progress</a>
+      <a href="{{ url_for('admin.tickets', status='Resolved') }}" class="nav-link">Resolved Tickets</a>
+      <a href="{{ url_for('admin.users') }}" class="nav-link">User Management</a>
+    {% else %}
+      <a href="{{ url_for('tickets.dashboard') }}" class="nav-link">Overview</a>
+      <a href="{{ url_for('tickets.tickets') }}" class="nav-link">My Tickets</a>
+      <a href="{{ url_for('tickets.create_ticket') }}" class="nav-link">Create Ticket</a>
+      <a href="{{ url_for('auth.profile') }}" class="nav-link">Profile</a>
+    {% endif %}
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-mini">
+      <span class="avatar">{{ current_user.name[0]|upper }}</span>
+      <span><strong>{{ current_user.name }}</strong><small>{{ current_user.role|title }}</small></span>
+    </div>
+    <form action="{{ url_for('auth.logout') }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="nav-link logout-link" type="submit">Logout</button>
+    </form>
+  </div>
+</aside>

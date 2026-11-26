@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - HelpDeskHub{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><span class="eyebrow">{% if admin_list %}TICKET MANAGEMENT{% else %}ADMIN OVERVIEW{% endif %}</span><h1>{% if admin_list %}All Tickets{% else %}Support Overview{% endif %}</h1><p>{% if admin_list %}Search, filter, and manage every support request.{% else %}Monitor current support activity and system load.{% endif %}</p></div>
+</section>
+{% if counts %}
+<section class="stat-grid admin-stat-grid">
+  <article class="stat-card reveal"><span>Total Tickets</span><strong data-count="{{ counts.tickets }}">0</strong><small>All requests</small></article>
+  <article class="stat-card reveal"><span>Total Users</span><strong data-count="{{ counts.users }}">0</strong><small>Registered accounts</small></article>
+  <article class="stat-card reveal"><span>Open</span><strong data-count="{{ counts.open }}">0</strong><small>Awaiting review</small></article>
+  <article class="stat-card reveal"><span>In Progress</span><strong data-count="{{ counts.progress }}">0</strong><small>Being handled</small></article>
+  <article class="stat-card reveal"><span>Resolved</span><strong data-count="{{ counts.resolved }}">0</strong><small>Completed</small></article>
+</section>
+{% endif %}
+<section class="filter-bar reveal">
+  <form method="get" action="{{ url_for('admin.tickets') }}" class="filter-form admin-filter-form">
+    <label class="search-field"><input type="search" name="q" value="{{ search|default('') }}" placeholder="Search ID or title"></label>
+    <select name="status"><option value="">All statuses</option>{% for value in statuses|default([]) %}<option value="{{ value }}" {% if selected_status|default('') == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select>
+    <select name="category"><option value="">All categories</option>{% for value in categories|default([]) %}<option value="{{ value }}" {% if selected_category|default('') == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select>
+    <select name="priority"><option value="">All priorities</option>{% for value in ['Low','Medium','High'] %}<option value="{{ value }}" {% if selected_priority|default('') == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select>
+    <button class="button button-ghost" type="submit">Apply</button>
+  </form>
+</section>
+<section class="panel reveal">
+{% if tickets %}
+<div class="table-wrap"><table><thead><tr><th>Ticket</th><th>Issue</th><th>Submitted by</th><th>Category</th><th>Priority</th><th>Status</th><th></th></tr></thead><tbody>
+{% for ticket in tickets %}
+<tr><td><span class="ticket-code">HDH-{{ '%05d'|format(ticket.id) }}</span></td><td><strong>{{ ticket.title }}</strong></td><td>{{ ticket.user.name }}</td><td>{{ ticket.category }}</td><td><span class="priority priority-{{ ticket.priority|lower }}">{{ ticket.priority }}</span></td><td><span class="badge badge-{{ ticket.status|lower|replace(' ', '-') }}">{{ ticket.status }}</span></td><td><a class="text-link" href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}">Manage</a></td></tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}
+<div class="empty-state"><div class="empty-icon">0</div><h3>No tickets found</h3><p>There are no requests matching the current view.</p></div>
+{% endif %}
+</section>
+{% endblock %}

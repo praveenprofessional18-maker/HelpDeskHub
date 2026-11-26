@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}HelpDeskHub{% endblock %}</title>
+  <meta name="theme-color" content="#0B1020">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+  {% block body %}
+  <div class="app-shell">
+    {% include "_sidebar.html" %}
+    <div class="main-area">
+      {% include "_topbar.html" %}
+      <main class="page-content">{% block content %}{% endblock %}</main>
+    </div>
+  </div>
+  {% endblock %}
+  <div class="toast-region" aria-live="polite">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="toast toast-{{ category }}" role="status">
+          <span class="toast-dot"></span><span>{{ message }}</span>
+          <button type="button" class="toast-close" aria-label="Dismiss">&times;</button>
+        </div>
+      {% endfor %}
+    {% endwith %}
+  </div>
+</body>
+</html>

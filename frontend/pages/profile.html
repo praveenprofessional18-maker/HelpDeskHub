@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Profile - HelpDeskHub{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">ACCOUNT</span><h1>Profile</h1><p>Your HelpDeskHub account information.</p></div></section>
+<section class="panel detail-meta profile-panel reveal">
+  <dl>
+    <div><dt>Full name</dt><dd>{{ current_user.name }}</dd></div>
+    <div><dt>Email address</dt><dd>{{ current_user.email }}</dd></div>
+    <div><dt>Role</dt><dd>{{ current_user.role|title }}</dd></div>
+    <div><dt>Member since</dt><dd>{{ current_user.created_at.strftime('%B %d, %Y') }}</dd></div>
+  </dl>
+</section>
+{% endblock %}
