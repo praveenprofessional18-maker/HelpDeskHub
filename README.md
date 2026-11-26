@@ -58,3 +58,11 @@ flask --app run.py run
 ```
 
 Open `http://127.0.0.1:5000` in a browser. Registration creates a normal user account; admin privileges are only available through the CLI commands.
+
+## Run the tests
+
+```powershell
+python -m pytest
+```
+
+The tests use an in-memory SQLite database and disable CSRF for test requests. A separate test checks that a POST without a CSRF token is rejected.
