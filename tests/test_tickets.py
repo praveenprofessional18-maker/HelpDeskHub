@@ -41,3 +41,11 @@ def test_create_ticket_missing_title(client, app, user):
     assert b"Enter a ticket title" in response.data
     with app.app_context():
         assert Ticket.query.count() == 0
+
+
+def test_user_can_open_own_ticket(client, ticket):
+    login(client)
+    response = client.get(f"/tickets/{ticket}")
+
+    assert response.status_code == 200
+    assert b"Campus Wi-Fi disconnects" in response.data
