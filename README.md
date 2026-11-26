@@ -66,3 +66,13 @@ python -m pytest
 ```
 
 The tests use an in-memory SQLite database and disable CSRF for test requests. A separate test checks that a POST without a CSRF token is rejected.
+
+## Manual test checklist
+
+- Register using a valid email; try a duplicate email and mismatched or short passwords.
+- Log in with a wrong password and confirm the message stays generic.
+- Create a ticket, then view it in the dashboard and detail page.
+- Log out and confirm the dashboard requires login.
+- Sign in as an admin, filter/search the queue and change a ticket status one step at a time.
+- Try to open another user's ticket while signed in as a normal user; it should return 404.
+- Check the pages at mobile and desktop widths and use the keyboard to navigate forms.
