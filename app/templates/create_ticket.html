@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Create ticket | HelpDeskHub{% endblock %}
+{% block content %}
+  <section class="container page-main">
+    <div class="form-panel form-panel-wide">
+      <p class="eyebrow">New support request</p>
+      <h1>Create a ticket</h1>
+      <p class="form-intro">Include enough detail for the IT desk to understand what you were doing and what went wrong.</p>
+      <form method="post" action="{{ url_for('tickets.create_ticket') }}" data-validate novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field">
+          <label for="ticket-title">Ticket title</label>
+          <input id="ticket-title" name="title" type="text" maxlength="120" required value="{{ values.title }}" aria-describedby="title-error" {% if errors.get('title') %}aria-invalid="true"{% endif %}>
+          <small class="field-error" id="title-error" data-error-for="title">{{ errors.get("title", "") }}</small>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="ticket-category">Category</label>
+            <select id="ticket-category" name="category" required aria-describedby="category-error" {% if errors.get('category') %}aria-invalid="true"{% endif %}>
+              <option value="">Choose a category</option>
+              {% for category in categories %}
+                <option value="{{ category }}" {% if values.category == category %}selected{% endif %}>{{ category }}</option>
+              {% endfor %}
+            </select>
+            <small class="field-error" id="category-error" data-error-for="category">{{ errors.get("category", "") }}</small>
+          </div>
+          <div class="field">
+            <label for="ticket-priority">Priority</label>
+            <select id="ticket-priority" name="priority" required aria-describedby="priority-error" {% if errors.get('priority') %}aria-invalid="true"{% endif %}>
+              <option value="">Choose a priority</option>
+              {% for priority in priorities %}
+                <option value="{{ priority }}" {% if values.priority == priority %}selected{% endif %}>{{ priority }}</option>
+              {% endfor %}
+            </select>
+            <small class="field-error" id="priority-error" data-error-for="priority">{{ errors.get("priority", "") }}</small>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ticket-description">Describe the issue</label>
+          <textarea id="ticket-description" name="description" rows="6" maxlength="5000" required aria-describedby="description-error" {% if errors.get('description') %}aria-invalid="true"{% endif %}>{{ values.description }}</textarea>
+          <small class="field-error" id="description-error" data-error-for="description">{{ errors.get("description", "") }}</small>
+        </div>
+        <div class="button-row">
+          <button class="button" type="submit">Submit ticket</button>
+          <a class="button button-secondary" href="{{ url_for('tickets.dashboard') }}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </section>
+{% endblock %}
