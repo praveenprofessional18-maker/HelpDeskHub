@@ -38,3 +38,14 @@ def test_register_duplicate_email(client, user):
 
     assert response.status_code == 400
     assert b"already exists" in response.data
+
+
+def test_wrong_password_uses_generic_error(client, user):
+    response = client.post(
+        "/login",
+        data={"email": "alex@college.edu", "password": "wrongpass"},
+    )
+
+    assert response.status_code == 401
+    assert b"Invalid email or password" in response.data
+    assert b"email does not exist" not in response.data.lower()
