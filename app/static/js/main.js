@@ -33,3 +33,20 @@ function validateForm(form) {
   }
   return valid;
 }
+
+function initValidation() {
+  document.querySelectorAll("form[data-validate]").forEach((form) => {
+    form.addEventListener("input", (event) => {
+      if (event.target.matches("input, select, textarea")) {
+        setFieldError(form, event.target, "");
+      }
+    });
+
+    form.addEventListener("submit", (event) => {
+      if (validateForm(form)) return;
+      event.preventDefault();
+      const firstInvalid = form.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+    });
+  });
+}
