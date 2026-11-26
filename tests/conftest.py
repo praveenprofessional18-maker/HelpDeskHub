@@ -28,3 +28,31 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+@pytest.fixture
+def user(app):
+    with app.app_context():
+        account = User(
+            name="Alex Morgan",
+            email="alex@college.edu",
+            password_hash=generate_password_hash("correct-horse"),
+            role=USER_ROLE,
+        )
+        db.session.add(account)
+        db.session.commit()
+        return account.id
+
+
+@pytest.fixture
+def admin_user(app):
+    with app.app_context():
+        account = User(
+            name="IT Admin",
+            email="admin@college.edu",
+            password_hash=generate_password_hash("correct-horse"),
+            role=ADMIN_ROLE,
+        )
+        db.session.add(account)
+        db.session.commit()
+        return account.id
