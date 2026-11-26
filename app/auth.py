@@ -51,3 +51,61 @@ def is_safe_next_url(target):
 
     destination = urlsplit(urljoin(request.host_url, target))
     return destination.scheme in {"http", "https"} and destination.netloc == request.host
+
+
+@auth.route("/register", methods=("GET", "POST"))
+def register():
+    values = {"name": "", "email": ""}
+    errors = {}
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = normalize_email(request.form.get("email", ""))
+        password = request.form.get("password", "")
+        confirmation = request.form.get("confirm_password", "")
+        values = {"name": name, "email": email}
+
+        if not name:
+            errors["name"] = "Enter your full name."
+        elif len(name) > 100:
+            errors["name"] = "Name must be 100 characters or fewer."
+
+        if not email:
+            errors["email"] = "Enter your email address."
+        elif len(email) > 254 or not valid_email(email):
+            errors["email"] = "Enter a valid email address."
+
+        if not password:
+            errors["password"] = "Enter a password."
+        elif len(password) < 8:
+            errors["password"] = "Password must be at least 8 characters."
+        elif len(password) > 128:
+            errors["password"] = "Password must be 128 characters or fewer."
+
+        if not confirmation:
+            errors["confirm_password"] = "Confirm your password."
+        elif len(confirmation) < 8:
+            errors["confirm_password"] = "Password must be at least 8 characters."
+        elif len(confirmation) > 128:
+            errors["confirm_password"] = "Password must be 128 characters or fewer."
+        elif password != confirmation:
+            errors["confirm_password"] = "Passwords do not match."
+
+        if email and valid_email(email) and User.query.filter_by(email=email).first():
+            errors["email"] = "An account with that email already exists."
+
+        if errors:
+            return render_template("register.html", values=values, errors=errors), 400
+
+        user = User(
+            name=name,
+            email=email,
+            password_hash=generate_password_hash(password),
+            role=USER_ROLE,
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash("Your account is ready. You can now log in.", "success")
+        return redirect(url_for("auth.login"))
+
+    return render_template("register.html", values=values, errors=errors)
