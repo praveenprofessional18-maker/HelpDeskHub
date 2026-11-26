@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Invalid request | HelpDeskHub{% endblock %}
+{% block content %}
+  <section class="container page-main">
+    <div class="empty-state">
+      <p class="eyebrow">400 · Invalid request</p>
+      <h1>That request could not be processed.</h1>
+      <p>{{ error.description or "Check the submitted values and try again." }}</p>
+      <a class="button" href="{{ url_for('index') }}">Return home</a>
+    </div>
+  </section>
+{% endblock %}
