@@ -56,3 +56,19 @@ def admin_user(app):
         db.session.add(account)
         db.session.commit()
         return account.id
+
+
+@pytest.fixture
+def ticket(app, user):
+    with app.app_context():
+        item = Ticket(
+            user_id=user,
+            title="Campus Wi-Fi disconnects",
+            category="Wi-Fi",
+            priority="Medium",
+            description="Connection drops in the library.",
+            status="Open",
+        )
+        db.session.add(item)
+        db.session.commit()
+        return item.id
