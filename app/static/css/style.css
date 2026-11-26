@@ -239,3 +239,47 @@ h3 { margin-bottom: 8px; font-size: 1.15rem; }
 .footer-inner p { margin: 0; }
 .footer-inner strong { color: var(--ink); }
 .footer-inner span { margin-left: 8px; }
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.page-heading h1 { margin-bottom: 8px; font-size: clamp(2rem, 4vw, 2.8rem); }
+.page-heading .lead { margin-bottom: 0; }
+.summary-card {
+  display: flex;
+  width: fit-content;
+  min-width: 205px;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 32px;
+  padding: 14px 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 650;
+}
+.summary-number { color: var(--accent-dark); font-size: 1.8rem; font-weight: 800; }
+.ticket-list, .admin-ticket-list { display: grid; gap: 14px; }
+.ticket-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.ticket-card h3 { margin-bottom: 6px; }
+.ticket-card h3 a { color: var(--ink); text-decoration: none; }
+.ticket-card h3 a:hover { color: var(--accent-dark); text-decoration: underline; }
+.ticket-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; color: var(--muted); font-size: 0.9rem; }
+.ticket-id { margin-bottom: 5px; color: var(--muted); font-size: 0.84rem; font-weight: 650; }
+.ticket-side { display: grid; justify-items: end; gap: 9px; }
+.text-link { color: var(--accent-dark); }
+.empty-state { padding: 32px; border: 1px dashed #9babb4; border-radius: 8px; background: var(--surface); text-align: center; }
+.empty-state p { margin-bottom: 10px; color: var(--muted); }
