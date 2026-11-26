@@ -50,3 +50,52 @@ function initValidation() {
     });
   });
 }
+
+function initAdminFilters() {
+  const controls = document.querySelector("[data-filters]");
+  const cards = Array.from(document.querySelectorAll("[data-ticket-card]"));
+  if (!controls || cards.length === 0) return;
+
+  const search = controls.querySelector('[data-filter="search"]');
+  const status = controls.querySelector('[data-filter="status"]');
+  const category = controls.querySelector('[data-filter="category"]');
+  const priority = controls.querySelector('[data-filter="priority"]');
+  const results = document.querySelector("[data-results-count]");
+  const emptyState = document.querySelector("[data-admin-empty]");
+
+  function filterCards() {
+    const term = search.value.trim().toLowerCase();
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const matchesSearch = `${card.dataset.id} ${card.dataset.title}`.toLowerCase().includes(term);
+      const matchesStatus = !status.value || card.dataset.status === status.value;
+      const matchesCategory = !category.value || card.dataset.category === category.value;
+      const matchesPriority = !priority.value || card.dataset.priority === priority.value;
+      const visible = matchesSearch && matchesStatus && matchesCategory && matchesPriority;
+      card.hidden = !visible;
+      if (visible) visibleCount += 1;
+    });
+    results.textContent = `${visibleCount} matching tickets`;
+    emptyState.hidden = visibleCount > 0;
+  }
+
+  controls.addEventListener("input", filterCards);
+  controls.addEventListener("change", filterCards);
+  const applyButton = controls.querySelector("[data-apply-filters]");
+  applyButton.addEventListener("click", () => {
+    const params = new URLSearchParams();
+    if (status.value) params.set("status", status.value);
+    if (category.value) params.set("category", category.value);
+    if (priority.value) params.set("priority", priority.value);
+    if (search.value.trim()) params.set("search", search.value.trim());
+    window.location.assign(`${window.location.pathname}?${params.toString()}`);
+  });
+
+  search.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      applyButton.click();
+    }
+  });
+  filterCards();
+}
