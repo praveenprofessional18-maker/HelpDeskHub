@@ -132,3 +132,82 @@ def register_commands(app):
         db.session.add(user)
         db.session.commit()
         click.echo(f"Administrator account created for {email}.")
+
+    @app.cli.command("seed-demo")
+    def seed_demo():
+        """Create demo user/admin accounts and example tickets."""
+        demo_user_email = "student@college.edu"
+        demo_admin_email = "admin@college.edu"
+        demo_user = User.query.filter_by(email=demo_user_email).first()
+        demo_admin = User.query.filter_by(email=demo_admin_email).first()
+
+        if demo_user and demo_user.role != USER_ROLE:
+            raise click.ClickException("The demo student email is already used by an admin.")
+        if demo_admin and demo_admin.role != ADMIN_ROLE:
+            raise click.ClickException("The demo admin email is already used by a user.")
+
+        user_password = None
+        admin_password = None
+        if demo_user is None:
+            user_password = click.prompt(
+                "Demo student password (minimum 8 characters)",
+                hide_input=True,
+                confirmation_prompt=True,
+            )
+        if demo_admin is None:
+            admin_password = click.prompt(
+                "Demo admin password (minimum 8 characters)",
+                hide_input=True,
+                confirmation_prompt=True,
+            )
+        for password in (user_password, admin_password):
+            if password is not None and (len(password) < 8 or len(password) > 128):
+                raise click.ClickException("Passwords must be between 8 and 128 characters.")
+
+        if demo_user is None:
+            demo_user = User(
+                name="Alex Morgan",
+                email=demo_user_email,
+                password_hash=generate_password_hash(user_password),
+                role=USER_ROLE,
+            )
+            db.session.add(demo_user)
+        if demo_admin is None:
+            demo_admin = User(
+                name="IT Administrator",
+                email=demo_admin_email,
+                password_hash=generate_password_hash(admin_password),
+                role=ADMIN_ROLE,
+            )
+            db.session.add(demo_admin)
+        db.session.flush()
+
+        samples = (
+            ("Wi-Fi disconnects in the science building", CATEGORY_WIFI, PRIORITY_MEDIUM,
+             "My laptop disconnects from campus Wi-Fi every few minutes in room S214.",
+             STATUS_IN_PROGRESS, 1),
+            ("Unable to install the statistics software", CATEGORY_SOFTWARE, PRIORITY_LOW,
+             "The installer stops before finishing on a college lab computer.",
+             STATUS_OPEN, 2),
+            ("Reset access to student portal", CATEGORY_ACCOUNT, PRIORITY_HIGH,
+             "I cannot access the student portal after changing my password.",
+             STATUS_RESOLVED, 3),
+        )
+        now = utc_now()
+        for title, category, priority, description, status, days_ago in samples:
+            existing = Ticket.query.filter_by(user_id=demo_user.id, title=title).first()
+            if existing is None:
+                created_at = now - timedelta(days=days_ago)
+                db.session.add(Ticket(
+                    user_id=demo_user.id,
+                    title=title,
+                    category=category,
+                    priority=priority,
+                    description=description,
+                    status=status,
+                    created_at=created_at,
+                    updated_at=created_at,
+                ))
+
+        db.session.commit()
+        click.echo("Demo data is ready. Sign in with student@college.edu or admin@college.edu.")
