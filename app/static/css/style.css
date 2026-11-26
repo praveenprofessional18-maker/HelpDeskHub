@@ -1,0 +1,103 @@
+:root {
+  color-scheme: light;
+  --ink: #172b3a;
+  --muted: #526574;
+  --line: #d6e0e5;
+  --paper: #ffffff;
+  --surface: #f3f7f8;
+  --accent: #075d68;
+  --accent-dark: #064952;
+  --accent-soft: #e4f2f2;
+  --error: #a42828;
+  --open-bg: #fff1d2;
+  --open-ink: #694500;
+  --progress-bg: #e1efff;
+  --progress-ink: #174e81;
+  --resolved-bg: #e1f3e8;
+  --resolved-ink: #1c6034;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  line-height: 1.6;
+}
+
+a { color: var(--accent-dark); }
+a:hover { color: var(--accent); }
+
+:focus-visible {
+  outline: 3px solid #b05d00;
+  outline-offset: 3px;
+}
+
+.container {
+  width: min(1120px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.site-nav {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.nav-links a {
+  color: var(--muted);
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] { color: var(--accent-dark); }
+.nav-links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
+.nav-logout { display: inline-flex; margin: 0; }
+.nav-logout-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nav-logout-button:hover { color: var(--accent-dark); }
+
+h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.025em; }
+h1 { margin-bottom: 16px; font-size: clamp(2rem, 5vw, 3.35rem); }
+h2 { margin-bottom: 12px; font-size: clamp(1.45rem, 3vw, 2rem); }
+h3 { margin-bottom: 8px; font-size: 1.15rem; }
