@@ -109,3 +109,43 @@ def register():
         return redirect(url_for("auth.login"))
 
     return render_template("register.html", values=values, errors=errors)
+
+
+@auth.route("/login", methods=("GET", "POST"))
+def login():
+    if request.method == "POST":
+        email = normalize_email(request.form.get("email", ""))
+        password = request.form.get("password", "")
+        user = None
+
+        if len(email) <= 254 and valid_email(email) and 8 <= len(password) <= 128:
+            user = User.query.filter_by(email=email).first()
+
+        if user is None or not check_password_hash(user.password_hash, password):
+            flash("Invalid email or password", "error")
+            return render_template(
+                "login.html",
+                email=email,
+                next_url=request.form.get("next", ""),
+            ), 401
+
+        session.clear()
+        session["user_id"] = user.id
+        destination = request.form.get("next", "")
+        if is_safe_next_url(destination):
+            return redirect(destination)
+        return redirect(url_for("tickets.dashboard"))
+
+    return render_template(
+        "login.html",
+        email="",
+        next_url=request.args.get("next", ""),
+    )
+
+
+@auth.post("/logout")
+@login_required
+def logout():
+    session.clear()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("index"))
