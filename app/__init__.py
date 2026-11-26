@@ -79,3 +79,56 @@ def create_app(test_config=None):
         db.create_all()
 
     return app
+
+
+def register_commands(app):
+    import click
+    from datetime import timedelta
+
+    from werkzeug.security import generate_password_hash
+
+    from app.constants import (
+        ADMIN_ROLE,
+        CATEGORY_ACCOUNT,
+        CATEGORY_SOFTWARE,
+        CATEGORY_WIFI,
+        PRIORITY_HIGH,
+        PRIORITY_LOW,
+        PRIORITY_MEDIUM,
+        STATUS_IN_PROGRESS,
+        STATUS_OPEN,
+        STATUS_RESOLVED,
+        USER_ROLE,
+    )
+    from app.models import Ticket, User, utc_now
+    from app.validation import normalize_email, valid_email
+
+    @app.cli.command("create-admin")
+    def create_admin():
+        """Create an administrator account interactively."""
+        name = click.prompt("Admin full name").strip()
+        email = normalize_email(click.prompt("Admin email"))
+        password = click.prompt(
+            "Admin password (minimum 8 characters)",
+            hide_input=True,
+            confirmation_prompt=True,
+        )
+
+        if not name or len(name) > 100:
+            raise click.ClickException("Name is required and must be 100 characters or fewer.")
+        if len(email) > 254 or not valid_email(email):
+            raise click.ClickException("Enter a valid email address.")
+        if len(password) < 8 or len(password) > 128:
+            raise click.ClickException("Password must be between 8 and 128 characters.")
+        if User.query.filter_by(email=email).first():
+            raise click.ClickException("An account with that email already exists.")
+
+        user = User(
+            name=name,
+            email=email,
+            password_hash=generate_password_hash(password),
+            role=ADMIN_ROLE,
+        )
+        db.session.add(user)
+        db.session.commit()
+        click.echo(f"Administrator account created for {email}.")
