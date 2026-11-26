@@ -20,16 +20,27 @@ CONFIGS = {
 }
 
 
+def get_config_class(config_name):
+    normalized_name = str(config_name).strip().lower()
+    if normalized_name not in CONFIGS:
+        supported = ", ".join(sorted(CONFIGS))
+        raise RuntimeError(
+            f"Unknown Flask configuration '{config_name}'. "
+            f"Expected one of: {supported}."
+        )
+    return normalized_name, CONFIGS[normalized_name]
+
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    config_name = os.environ.get("FLASK_CONFIG", "development").lower()
-    if config_name not in CONFIGS:
-        raise ValueError(f"Unknown Flask configuration: {config_name}")
-    app.config.from_object(CONFIGS[config_name])
+    config_name, config_class = get_config_class(
+        os.environ.get("FLASK_CONFIG", "development")
+    )
+    app.config.from_object(config_class)
     if test_config:
         app.config.update(test_config)
     if not app.config.get("TESTING"):
-        CONFIGS[config_name].validate(app.config)
+        config_class.validate(app.config)
 
     db.init_app(app)
     csrf.init_app(app)

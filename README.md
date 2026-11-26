@@ -33,6 +33,8 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 Open `.env` and set `SECRET_KEY` to the generated value. Keep `.env` private and do not commit it. The SQLite database is created automatically on startup at the configured `DATABASE_URL`.
 
+Supported Flask configuration names are `development`, `testing`, and `production`. The application rejects unknown names with a startup error that lists the supported options.
+
 The app uses the development configuration by default. To choose another `config.py` class, set `FLASK_CONFIG=production` or `FLASK_CONFIG=testing` in the environment.
 
 Non-testing configurations validate the configured `SECRET_KEY` during startup. The key must be at least 32 characters and must not use the placeholder value from `.env.example`. Production configuration also enables secure session cookies.

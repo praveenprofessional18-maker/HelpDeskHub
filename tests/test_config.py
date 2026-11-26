@@ -1,6 +1,31 @@
 import pytest
 
-from app import create_app
+from app import create_app, get_config_class
+from config import Development, Production, Testing
+
+
+def test_get_config_class_normalizes_supported_names():
+    name, config_class = get_config_class("  PRODUCTION  ")
+
+    assert name == "production"
+    assert config_class is Production
+
+
+@pytest.mark.parametrize(
+    ("name", "config_class"),
+    (
+        ("development", Development),
+        ("testing", Testing),
+        ("production", Production),
+    ),
+)
+def test_get_config_class_resolves_supported_names(name, config_class):
+    assert get_config_class(name) == (name, config_class)
+
+
+def test_get_config_class_reports_supported_names_for_unknown_config():
+    with pytest.raises(RuntimeError, match="development, production, testing"):
+        get_config_class("staging")
 
 
 def test_development_configuration_requires_a_strong_secret(monkeypatch):
