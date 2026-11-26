@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}My tickets | HelpDeskHub{% endblock %}
+{% block content %}
+  <section class="container page-main">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">Student workspace</p>
+        <h1>Welcome, {{ current_user.name }}</h1>
+        <p class="lead">Your campus technology requests, all in one place.</p>
+      </div>
+      <a class="button" href="{{ url_for('tickets.create_ticket') }}">Create ticket</a>
+    </div>
+    <section class="summary-card" aria-label="Ticket count">
+      <span class="summary-number">{{ tickets|length }}</span>
+      <span>tickets submitted</span>
+    </section>
+    <section class="section" aria-labelledby="my-tickets-title">
+      <div class="section-heading">
+        <p class="eyebrow">Your requests</p>
+        <h2 id="my-tickets-title">My tickets</h2>
+      </div>
+      {% if tickets %}
+        <div class="ticket-list">
+          {% for ticket in tickets %}
+            <article class="ticket-card">
+              <div>
+                <p class="ticket-id">{{ ticket.id|ticket_code }}</p>
+                <h3><a href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}">{{ ticket.title }}</a></h3>
+                <p class="ticket-meta">
+                  <span>Priority: {{ ticket.priority }}</span>
+                  <span>Created: {{ ticket.created_at.strftime("%b %d, %Y %H:%M") }} UTC</span>
+                </p>
+              </div>
+              <div class="ticket-side">
+                <span class="status-badge status-{{ ticket.status|lower|replace(' ', '-') }}">{{ ticket.status }}</span>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>No tickets yet</h3>
+          <p>When you report a campus IT issue, it will appear here.</p>
+          <a class="text-link" href="{{ url_for('tickets.create_ticket') }}">Submit your first ticket</a>
+        </div>
+      {% endif %}
+    </section>
+  </section>
+{% endblock %}
