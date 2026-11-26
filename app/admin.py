@@ -59,3 +59,25 @@ def dashboard():
         transitions=STATUS_TRANSITIONS,
         filters={"status": status, "category": category, "priority": priority, "search": search},
     )
+
+
+@admin.post("/admin/tickets/<int:ticket_id>/status")
+@admin_required
+def update_status(ticket_id):
+    ticket = db.session.get(Ticket, ticket_id)
+    if ticket is None:
+        abort(404)
+
+    new_status = request.form.get("status", "").strip()
+    if new_status not in STATUSES:
+        abort(400, description="Choose a valid ticket status.")
+
+    if new_status != ticket.status and new_status != STATUS_TRANSITIONS[ticket.status]:
+        abort(400, description="That status transition is not allowed.")
+
+    if new_status != ticket.status:
+        ticket.status = new_status
+        db.session.commit()
+        flash("Ticket status updated.", "success")
+
+    return redirect(url_for("admin.dashboard"))
