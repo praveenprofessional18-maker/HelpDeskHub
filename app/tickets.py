@@ -78,3 +78,13 @@ def create_ticket():
         categories=CATEGORIES,
         priorities=PRIORITIES,
     )
+
+
+@tickets.get("/tickets/<int:ticket_id>")
+@login_required
+def ticket_detail(ticket_id):
+    query = Ticket.query.filter_by(id=ticket_id)
+    if g.user.role != "admin":
+        query = query.filter_by(user_id=g.user.id)
+    ticket = query.first_or_404()
+    return render_template("ticket_detail.html", ticket=ticket)
