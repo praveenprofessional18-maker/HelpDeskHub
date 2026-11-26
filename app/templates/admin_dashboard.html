@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard | HelpDeskHub{% endblock %}
+{% block content %}
+  <section class="container page-main">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">IT staff workspace</p>
+        <h1>Ticket management</h1>
+        <p class="lead">Review incoming issues and keep requesters informed.</p>
+      </div>
+    </div>
+    <section class="card-grid three-columns count-grid" aria-label="Tickets by status">
+      {% for status in statuses %}
+        <article class="card count-card">
+          <span class="count-label">{{ status }}</span>
+          <strong>{{ counts[status] }}</strong>
+        </article>
+      {% endfor %}
+    </section>
+    <section class="section" aria-labelledby="all-tickets-heading">
+      <div class="section-heading">
+        <p class="eyebrow">Queue</p>
+        <h2 id="all-tickets-heading">All tickets</h2>
+      </div>
+      <div class="filter-panel" data-filters role="search" aria-label="Filter tickets">
+        <div class="field">
+          <label for="ticket-search">Search ID or title</label>
+          <input id="ticket-search" type="search" name="search" maxlength="120" value="{{ filters.search }}" placeholder="e.g. HD-1042" data-filter="search">
+        </div>
+        <div class="field">
+          <label for="status-filter">Status</label>
+          <select id="status-filter" name="status" data-filter="status">
+            <option value="">All statuses</option>
+            {% for status in statuses %}
+              <option value="{{ status }}" {% if filters.status == status %}selected{% endif %}>{{ status }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="category-filter">Category</label>
+          <select id="category-filter" name="category" data-filter="category">
+            <option value="">All categories</option>
+            {% for category in categories %}
+              <option value="{{ category }}" {% if filters.category == category %}selected{% endif %}>{{ category }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="priority-filter">Priority</label>
+          <select id="priority-filter" name="priority" data-filter="priority">
+            <option value="">All priorities</option>
+            {% for priority in priorities %}
+              <option value="{{ priority }}" {% if filters.priority == priority %}selected{% endif %}>{{ priority }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="button filter-button" type="button" data-apply-filters>Apply filters</button>
+      </div>
+      <p class="results-count" data-results-count aria-live="polite">{{ tickets|length }} matching tickets</p>
+      {% if tickets %}
+        <div class="admin-ticket-list" data-admin-tickets>
+          {% for ticket in tickets %}
+            <article class="admin-ticket-card" data-ticket-card
+              data-id="{{ ticket.id|ticket_code }}"
+              data-title="{{ ticket.title }}"
+              data-status="{{ ticket.status }}"
+              data-category="{{ ticket.category }}"
+              data-priority="{{ ticket.priority }}">
+              <div class="admin-ticket-main">
+                <p class="ticket-id">{{ ticket.id|ticket_code }} · {{ ticket.user.name }} ({{ ticket.user.email }})</p>
+                <h3><a href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}">{{ ticket.title }}</a></h3>
+                <span class="status-badge status-{{ ticket.status|lower|replace(' ', '-') }}">{{ ticket.status }}</span>
+                <p class="ticket-meta">
+                  <span>Category: {{ ticket.category }}</span>
+                  <span>Priority: {{ ticket.priority }}</span>
+                  <span>Created: {{ ticket.created_at.strftime("%b %d, %Y %H:%M") }} UTC</span>
+                </p>
+              </div>
+              <form class="admin-ticket-actions" method="post" action="{{ url_for('admin.update_status', ticket_id=ticket.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="field">
+                  <label for="status-{{ ticket.id }}">Update status</label>
+                  <select id="status-{{ ticket.id }}" name="status">
+                    <option value="{{ ticket.status }}" selected>{{ ticket.status }}</option>
+                    {% if transitions[ticket.status] %}
+                      <option value="{{ transitions[ticket.status] }}">{{ transitions[ticket.status] }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <button class="button" type="submit">Save</button>
+              </form>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>No tickets match these filters</h3>
+          <p>Try changing a filter or clearing the search.</p>
+        </div>
+      {% endif %}
+      <div class="empty-state" data-admin-empty hidden>
+        <h3>No tickets match these filters</h3>
+        <p>Try changing a filter or clearing the search.</p>
+      </div>
+    </section>
+  </section>
+{% endblock %}
