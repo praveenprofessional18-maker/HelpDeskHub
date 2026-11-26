@@ -49,3 +49,13 @@ def test_wrong_password_uses_generic_error(client, user):
     assert response.status_code == 401
     assert b"Invalid email or password" in response.data
     assert b"email does not exist" not in response.data.lower()
+
+
+def test_logout_then_dashboard_is_blocked(client, user):
+    client.post("/login", data={"email": "alex@college.edu", "password": "correct-horse"})
+    logout_response = client.post("/logout")
+    response = client.get("/dashboard", follow_redirects=True)
+
+    assert logout_response.status_code == 302
+    assert response.status_code == 200
+    assert b"Login to HelpDeskHub" in response.data
