@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Page not found | HelpDeskHub{% endblock %}
+{% block content %}
+  <section class="container page-main">
+    <div class="empty-state">
+      <p class="eyebrow">404 · Not found</p>
+      <h1>We could not find that page or ticket.</h1>
+      <p>Check the address, or return to the home page.</p>
+      <a class="button" href="{{ url_for('index') }}">Return home</a>
+    </div>
+  </section>
+{% endblock %}
