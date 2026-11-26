@@ -155,3 +155,32 @@ h3 { margin-bottom: 8px; font-size: 1.15rem; }
 .button-light { border-color: var(--paper); background: var(--paper); color: var(--accent-dark); }
 .button-light:hover { border-color: #e4f2f2; background: #e4f2f2; color: var(--accent-dark); }
 .button-full { width: 100%; margin-top: 8px; }
+
+.section { padding-block: 36px 68px; }
+.section-heading { margin-bottom: 24px; }
+.section-heading .eyebrow { margin-bottom: 7px; }
+.card-grid { display: grid; gap: 18px; }
+.three-columns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.feature-card { min-height: 210px; padding: 25px; }
+.feature-card p { margin-bottom: 0; color: var(--muted); }
+.step-number { display: block; margin-bottom: 24px; color: var(--accent); font-size: 0.85rem; font-weight: 800; }
+
+.callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 72px;
+  padding: 30px 34px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+}
+.callout h2 { margin-bottom: 8px; font-size: 1.55rem; }
+.callout p { margin-bottom: 0; color: #e2f1f1; }
+.callout .button { flex: 0 0 auto; }
