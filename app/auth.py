@@ -41,3 +41,13 @@ def admin_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+def is_safe_next_url(target):
+    if not target or not target.startswith("/") or target.startswith("//"):
+        return False
+    if "\\" in target or any(ord(char) < 32 for char in target):
+        return False
+
+    destination = urlsplit(urljoin(request.host_url, target))
+    return destination.scheme in {"http", "https"} and destination.netloc == request.host
