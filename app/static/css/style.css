@@ -340,3 +340,37 @@ h3 { margin-bottom: 8px; font-size: 1.15rem; }
 .save-message { grid-column: 1 / -1; margin: 0; color: var(--accent-dark); font-size: 0.88rem; }
 
 [hidden] { display: none !important; }
+
+@media (max-width: 760px) {
+  .site-nav { align-items: flex-start; flex-direction: column; justify-content: center; gap: 8px; padding-block: 14px; }
+  .nav-links { justify-content: flex-start; gap: 6px 17px; }
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 58px 52px; }
+  .three-columns { grid-template-columns: 1fr; }
+  .feature-card { min-height: unset; }
+  .step-number { margin-bottom: 14px; }
+  .filter-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filter-button { justify-self: start; }
+}
+
+@media (max-width: 520px) {
+  .container { width: min(100% - 28px, 1120px); }
+  .nav-links { gap: 5px 13px; }
+  .nav-links a { font-size: 0.86rem; }
+  .hero { padding-top: 42px; }
+  .hero-note { padding: 23px; }
+  .callout, .page-heading { align-items: flex-start; flex-direction: column; }
+  .callout { margin-bottom: 48px; padding: 24px; }
+  .page-main { padding-block: 36px 52px; }
+  .form-panel, .detail-panel { padding: 24px 19px; }
+  .field-row, .detail-grid { grid-template-columns: 1fr; gap: 0; }
+  .detail-grid { gap: 16px; }
+  .footer-inner { align-items: flex-start; flex-direction: column; }
+  .footer-inner span { display: block; margin-left: 0; }
+  .ticket-card { flex-direction: column; gap: 14px; }
+  .ticket-side { justify-items: start; }
+  .filter-panel { grid-template-columns: 1fr; }
+  .admin-ticket-card { grid-template-columns: 1fr; }
+  .admin-ticket-actions { align-items: end; flex-wrap: wrap; }
+  .admin-ticket-actions .field { width: min(100%, 200px); }
+  .count-grid { gap: 10px; }
+}
