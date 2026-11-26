@@ -23,3 +23,21 @@ def test_create_ticket_valid(client, app, user):
         assert ticket.user_id == user
         assert ticket.status == "Open"
         assert ticket.category == "Wi-Fi"
+
+
+def test_create_ticket_missing_title(client, app, user):
+    login(client)
+    response = client.post(
+        "/tickets/new",
+        data={
+            "title": "   ",
+            "category": "Hardware",
+            "priority": "Low",
+            "description": "The classroom keyboard is not responding.",
+        },
+    )
+
+    assert response.status_code == 400
+    assert b"Enter a ticket title" in response.data
+    with app.app_context():
+        assert Ticket.query.count() == 0
