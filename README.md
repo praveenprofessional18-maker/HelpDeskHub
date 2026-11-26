@@ -34,3 +34,19 @@ python -c "import secrets; print(secrets.token_hex(32))"
 Open `.env` and set `SECRET_KEY` to the generated value. Keep `.env` private and do not commit it. The SQLite database is created automatically on startup at the configured `DATABASE_URL`.
 
 The app uses the development configuration by default. To choose another `config.py` class, set `FLASK_CONFIG=production` or `FLASK_CONFIG=testing` in the environment.
+
+## Create an admin account
+
+Run the interactive command and enter an admin name, email and password when prompted:
+
+```powershell
+flask --app run.py create-admin
+```
+
+To create sample accounts and tickets for a demo instead:
+
+```powershell
+flask --app run.py seed-demo
+```
+
+The demo command prompts for student and admin passwords if those accounts do not already exist. It does not print or store the plain-text passwords.
