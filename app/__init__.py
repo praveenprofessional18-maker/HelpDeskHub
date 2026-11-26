@@ -28,8 +28,8 @@ def create_app(test_config=None):
     app.config.from_object(CONFIGS[config_name])
     if test_config:
         app.config.update(test_config)
-    if not app.config.get("SECRET_KEY"):
-        raise RuntimeError("Set SECRET_KEY in your environment or .env file.")
+    if not app.config.get("TESTING"):
+        CONFIGS[config_name].validate(app.config)
 
     db.init_app(app)
     csrf.init_app(app)
