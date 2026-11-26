@@ -50,3 +50,11 @@ flask --app run.py seed-demo
 ```
 
 The demo command prompts for student and admin passwords if those accounts do not already exist. It does not print or store the plain-text passwords.
+
+## Run the app
+
+```powershell
+flask --app run.py run
+```
+
+Open `http://127.0.0.1:5000` in a browser. Registration creates a normal user account; admin privileges are only available through the CLI commands.
