@@ -23,3 +23,18 @@ def test_register_valid_account(client, app):
         assert user.role == "user"
         assert user.password_hash != "securepass8"
         assert check_password_hash(user.password_hash, "securepass8")
+
+
+def test_register_duplicate_email(client, user):
+    response = client.post(
+        "/register",
+        data={
+            "name": "Another Student",
+            "email": " ALEX@COLLEGE.EDU ",
+            "password": "securepass8",
+            "confirm_password": "securepass8",
+        },
+    )
+
+    assert response.status_code == 400
+    assert b"already exists" in response.data
