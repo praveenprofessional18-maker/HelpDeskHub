@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ ticket.id|ticket_code }} | HelpDeskHub{% endblock %}
+{% block content %}
+  <section class="container page-main">
+    <a class="text-link back-link" href="{{ url_for('tickets.dashboard') }}">← Back to my tickets</a>
+    <section class="detail-panel" aria-labelledby="ticket-heading">
+      <p class="eyebrow">Ticket details</p>
+      <h1 id="ticket-heading">{{ ticket.title }}</h1>
+      <p class="detail-id">{{ ticket.id|ticket_code }}</p>
+      <div class="detail-status">
+        <span class="status-badge status-{{ ticket.status|lower|replace(' ', '-') }}">{{ ticket.status }}</span>
+      </div>
+      <dl class="detail-grid">
+        <div><dt>Category</dt><dd>{{ ticket.category }}</dd></div>
+        <div><dt>Priority</dt><dd>{{ ticket.priority }}</dd></div>
+        <div><dt>Created</dt><dd>{{ ticket.created_at.strftime("%b %d, %Y %H:%M") }} UTC</dd></div>
+        <div><dt>Last updated</dt><dd>{{ ticket.updated_at.strftime("%b %d, %Y %H:%M") }} UTC</dd></div>
+      </dl>
+      <section class="description-block" aria-labelledby="description-heading">
+        <h2 id="description-heading">Issue description</h2>
+        <p>{{ ticket.description }}</p>
+      </section>
+      <p class="read-only-note">Ticket status is managed by the IT desk.</p>
+    </section>
+  </section>
+{% endblock %}
