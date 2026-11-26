@@ -73,3 +73,14 @@ def test_external_next_url_is_ignored(client, user):
 
     assert response.status_code == 302
     assert response.headers["Location"].endswith("/dashboard")
+
+
+def test_post_without_csrf_token_is_rejected(client, app):
+    app.config["WTF_CSRF_ENABLED"] = True
+    response = client.post(
+        "/login",
+        data={"email": "alex@college.edu", "password": "correct-horse"},
+    )
+
+    assert response.status_code == 400
+    assert b"CSRF" in response.data
